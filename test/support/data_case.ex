@@ -1,4 +1,4 @@
-defmodule ImCon.DataCase do
+defmodule Imcon.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -7,38 +7,36 @@ defmodule ImCon.DataCase do
   your tests.
 
   Finally, if the test case interacts with the database,
-  we enable the SQL sandbox, so changes done to the database
-  are reverted at the end of every test. If you are using
-  PostgreSQL, you can even run database tests asynchronously
-  by setting `use ImCon.DataCase, async: true`, although
-  this option is not recommended for other databases.
+  it cannot be async. For this reason, every test runs
+  inside a transaction which is reset at the beginning
+  of the test unless the test case is marked as async.
   """
 
   use ExUnit.CaseTemplate
 
   using do
     quote do
-      alias ImCon.Repo
+      alias Imcon.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import ImCon.DataCase
+      import Imcon.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ImCon.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Imcon.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(ImCon.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Imcon.Repo, {:shared, self()})
     end
 
     :ok
   end
 
   @doc """
-  A helper that transforms changeset errors into a map of messages.
+  A helper that transform changeset errors to a map of messages.
 
       assert {:error, changeset} = Accounts.create_user(%{password: "short"})
       assert "password is too short" in errors_on(changeset).password
@@ -47,8 +45,8 @@ defmodule ImCon.DataCase do
   """
   def errors_on(changeset) do
     Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
-      Regex.replace(~r"%{(\w+)}", message, fn _, key ->
-        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
+      Enum.reduce(opts, message, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
       end)
     end)
   end

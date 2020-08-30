@@ -1,18 +1,16 @@
-defmodule ImConWeb.ChannelCase do
+defmodule ImconWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
 
   Such tests rely on `Phoenix.ChannelTest` and also
   import other functionality to make it easier
-  to build common data structures and query the data layer.
+  to build common datastructures and query the data layer.
 
   Finally, if the test case interacts with the database,
-  we enable the SQL sandbox, so changes done to the database
-  are reverted at the end of every test. If you are using
-  PostgreSQL, you can even run database tests asynchronously
-  by setting `use ImConWeb.ChannelCase, async: true`, although
-  this option is not recommended for other databases.
+  it cannot be async. For this reason, every test runs
+  inside a transaction which is reset at the beginning
+  of the test unless the test case is marked as async.
   """
 
   use ExUnit.CaseTemplate
@@ -20,21 +18,20 @@ defmodule ImConWeb.ChannelCase do
   using do
     quote do
       # Import conveniences for testing with channels
-      import Phoenix.ChannelTest
-      import ImConWeb.ChannelCase
+      use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint ImConWeb.Endpoint
+      @endpoint ImconWeb.Endpoint
     end
   end
+
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ImCon.Repo)
-
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Imcon.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(ImCon.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Imcon.Repo, {:shared, self()})
     end
-
     :ok
   end
+
 end
