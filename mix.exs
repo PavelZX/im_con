@@ -36,10 +36,12 @@ defmodule Imcon.Mixfile do
       {:phoenix, "~> 1.5.4"},
       {:phoenix_pubsub, "~> 2.0.0"},
       {:phoenix_ecto, "~> 4.1.0"},
+      {:phoenix_swagger, "~> 0.8.2"},
+      {:ex_json_schema, "~> 0.7.4"}, # optional
       {:ecto, ">= 3.3.2"},
       {:ecto_sql, "~> 3.3.3"},
       {:postgrex, ">= 0.0.0"},
-      {:poison, "~> 4.0.1"},
+      {:poison, "~> 3.0.0"},
       {:phoenix_html, "~> 2.14.2"},
       {:phoenix_live_reload, "~> 1.2.4", only: :dev},
       {:gettext, "~> 0.18.0"},

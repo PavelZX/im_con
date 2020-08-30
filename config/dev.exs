@@ -33,8 +33,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :imcon, Imcon.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "postgres",
+  username: "pavelz",
+  password: "bOOm757s#",
+  database: "im_con",
   hostname: "localhost",
   pool_size: 10

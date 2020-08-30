@@ -39,3 +39,11 @@ config :mime, :types, %{
       "application/json" => ["json"],
       "application/xml" => ["xml"]
     }
+
+config :imcon, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: ImconWeb.Router, 
+      endpoint: ImconWeb.Endpoint
+    ]
+  }
